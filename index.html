@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Typing Test</title>
+  <style>
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      font-family: 'Arial', sans-serif;
+      background-color: #f4f4f4;
+    }
+
+    #typingContainer {
+      text-align: center;
+    }
+
+    #sentence {
+      font-size: 20px;
+      margin-bottom: 20px;
+    }
+
+    #textInput {
+      font-size: 16px;
+      padding: 10px;
+    }
+
+    #result {
+      margin-top: 20px;
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+
+<div id="typingContainer">
+  <div id="sentence"></div>
+  <input type="text" id="textInput" autocomplete="off" autofocus>
+  <div id="result"></div>
+</div>
+
+<script>
+  const sentences = [
+    "The quick brown fox jumps over the lazy dog.",
+    "Programming is fun and rewarding.",
+    "Web development opens up a world of possibilities.",
+    "Practice makes perfect.",
+    "Coding challenges help improve problem-solving skills."
+  ];
+
+  const sentenceElement = document.getElementById('sentence');
+  const textInputElement = document.getElementById('textInput');
+  const resultElement = document.getElementById('result');
+
+  let currentSentenceIndex = 0;
+  let startTime;
+
+  function startGame() {
+    currentSentenceIndex = 0;
+    displayNextSentence();
+    textInputElement.value = '';
+    textInputElement.addEventListener('input', checkTyping);
+    startTime = new Date().getTime();
+  }
+
+  function displayNextSentence() {
+    sentenceElement.textContent = sentences[currentSentenceIndex];
+  }
+
+  function checkTyping() {
+    const typedText = textInputElement.value;
+    const targetText = sentences[currentSentenceIndex];
+
+    if (typedText === targetText) {
+      currentSentenceIndex++;
+
+      if (currentSentenceIndex < sentences.length) {
+        displayNextSentence();
+        textInputElement.value = '';
+      } else {
+        endGame();
+      }
+    }
+  }
+
+  function endGame() {
+    const endTime = new Date().getTime();
+    const totalTime = (endTime - startTime) / 1000; // in seconds
+    const wordsPerMinute = Math.round(sentences.join(' ').split(' ').length / totalTime * 60);
+
+    resultElement.textContent = `Typing test completed! Your typing speed: ${wordsPerMinute} words per minute.`;
+    textInputElement.removeEventListener('input', checkTyping);
+  }
+
+  startGame();
+</script>
+
+</body>
+</html>
